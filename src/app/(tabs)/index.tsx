@@ -1,20 +1,25 @@
-import { Header } from "@/src/componentes/header";
-import { TweetItem } from "@/src/componentes/tweet/tweet-item";
-import { Logo } from "@/src/componentes/ui/Logo";
+import { Header } from "@/src/components/header";
+import { Logo } from "@/src/components/ui/Logo";
 import { router} from "expo-router";
 import { useEffect } from "react";
-import { Text, View , ScrollView} from "react-native";
+import { View} from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Loading } from "@/src/components/ui/loading";
+
 
 export default function HomeScreen() {
-
   useEffect(()=>{
        verify();
   },[]);
 
   const verify = async () => {
-    setTimeout(()=>{
+    const token = await AsyncStorage.getItem('token');
+
+    if(token){
+      router.replace('/dashboard');
+    }else{
       router.replace('/auth/signin');
-    }, 1000)
+    }
   }
 
   return (

@@ -1,5 +1,5 @@
-import { Button } from "@/src/componentes/ui/button";
-import { Input } from "@/src/componentes/ui/input";
+import { Button } from "@/src/components/ui/button";
+import { Input } from "@/src/components/ui/input";
 import { AntDesign, Entypo, Ionicons } from "@expo/vector-icons";
 import { Link } from "expo-router";
 import { useState } from "react";

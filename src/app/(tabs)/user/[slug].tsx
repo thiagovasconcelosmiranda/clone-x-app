@@ -1,6 +1,6 @@
-import { Header } from "@/src/componentes/header";
-import { TweetItem } from "@/src/componentes/tweet/tweet-item";
-import { Button } from "@/src/componentes/ui/button";
+import { Header } from "@/src/components/header";
+import { TweetItem } from "@/src/components/tweet/tweet-item";
+import { Button } from "@/src/components/ui/button";
 import { AntDesign, FontAwesome5 } from "@expo/vector-icons";
 import { Image, Pressable, ScrollView, Text, View } from "react-native";
 import {router, useLocalSearchParams} from 'expo-router';
@@ -15,7 +15,10 @@ export default function User() {
 
    return (
       <View className="flex-1 bg-black">
-         <Header search/>
+         <Header 
+         search
+         back
+         />
             <ScrollView>
                <View className="w-full h-44 border bg-gray-400 relative">
                   <Image source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ_c9PlH0OpgpcH9LfY9EP3J6xYpExQCO2EfA&s' }}

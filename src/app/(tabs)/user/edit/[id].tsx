@@ -1,12 +1,12 @@
 import { Image, Pressable, ScrollView, Text, View } from "react-native";
 import { useLocalSearchParams } from "expo-router";
-import { Header } from "@/src/componentes/header";
-import { TweetItem } from "@/src/componentes/tweet/tweet-item";
+import { Header } from "@/src/components/header";
+import { TweetItem } from "@/src/components/tweet/tweet-item";
 import { AntDesign, FontAwesome5, Ionicons } from "@expo/vector-icons";
-import { Button } from "@/src/componentes/ui/button";
-import { Input } from "@/src/componentes/ui/input";
+import { Button } from "@/src/components/ui/button";
+import { Input } from "@/src/components/ui/input";
 import { useState } from "react";
-import { ErrorInput } from "@/src/componentes/ui/error";
+import { ErrorInput } from "@/src/components/ui/error";
 
 
 export default function UserEdit() {
@@ -34,7 +34,7 @@ export default function UserEdit() {
 
     return (
         <View className="flex-1 bg-black">
-            <Header />
+            <Header back />
             <ScrollView>
                 <View className="w-full h-44 border bg-gray-400 relative">
                     <Image source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ_c9PlH0OpgpcH9LfY9EP3J6xYpExQCO2EfA&s' }}
