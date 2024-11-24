@@ -9,7 +9,9 @@ export default function Recommendation() {
             <View className="p-5">
                 <Text className="text-white text-2xl text-center">Quem seguir?</Text>
             </View>
-            <RecommendationArea />
+            <View className="flex justify-center items-center">
+              <RecommendationArea />
+            </View>
         </View>
     )
 }

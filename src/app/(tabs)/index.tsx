@@ -10,16 +10,17 @@ import { Loading } from "@/src/components/ui/loading";
 export default function HomeScreen() {
   useEffect(()=>{
        verify();
+      
   },[]);
+  
+  const logout = () => {
+
+  }
 
   const verify = async () => {
-    const token = await AsyncStorage.getItem('token');
-
-    if(token){
-      router.replace('/dashboard');
-    }else{
-      router.replace('/auth/signin');
-    }
+      setTimeout(()=>{
+        router.replace('/auth/signin');
+      },1000);
   }
 
   return (

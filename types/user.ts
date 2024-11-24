@@ -1,5 +1,5 @@
 
-export type User = {
+export type UserType = {
   slug: string;
   name: string;
   avatar: string;

@@ -2,16 +2,14 @@ import { Link } from "expo-router"
 import { Pressable, Text, View } from "react-native"
 
 type Props = {
-  trend: string;
+  trend: any;
 }
 
-export const TrendingItem = ({trend}: Props) => {
-    return (
-        <View>
-            <Link href={'/dashboard'}>
-              <Text className="text-gray-300 text-2xl underline">{trend}</Text>
-            </Link>
-            
-        </View>
-    )
+export const TrendingItem = ({ trend}: Props) => {
+  return (
+    <Link href={`/dashboard/${'estudar'}`}>
+      <Text className="text-gray-300 text-2xl underline">{trend.hashtag}</Text>
+    </Link>
+
+  )
 }

@@ -1,9 +1,11 @@
 import { Image, Pressable, Text, View } from "react-native"
 import { Logo } from "./ui/Logo"
-import { Ionicons, FontAwesome5, FontAwesome6 } from "@expo/vector-icons";
-import { Link } from "expo-router";
+import { Ionicons, FontAwesome6 } from "@expo/vector-icons";
+import { Link} from "expo-router";
 import { NavItem } from "./nav/nav-item";
-import { useState } from "react";
+import { useState, useContext} from "react";
+import { UserContext } from "../contexts/UserContext";
+import url from "../utils/url";
 
 type Props = {
     search?: boolean;
@@ -14,6 +16,8 @@ type Props = {
 export const Header = ({ search, back, navItem }: Props) => {
     const [activeNav, setActiveNav] = useState(false);
     const [activeTimeline, setActiveTimeline] = useState(false);
+    const {user} = useContext(UserContext);
+    const avatar = url.avatar(user);
 
     const handleClickNav = () => {
         if (activeNav == false) {
@@ -44,10 +48,10 @@ export const Header = ({ search, back, navItem }: Props) => {
                             </Link>
                         )}
 
-                        <View className="w-10 h-10 rounded-full flex justify-center items-center  bg-transparent">
+                        <View className="w-10 h-10 rounded-full flex justify-center items-center overflow-hidden border-2 border-white  bg-blue-500">
                             <Pressable onPress={handleClickNav}>
                                 <Image
-                                    source={require('../../assets/images/default.png')}
+                                    source={{uri: avatar}}
                                     style={{ width: 35, height: 35, resizeMode: 'cover' }}
                                 />
                             </Pressable>
@@ -86,9 +90,9 @@ export const Header = ({ search, back, navItem }: Props) => {
                 />
             )}
             {activeTimeline && (
-                <View className="w-52 bg-white flex justify-center absolute p-2 right-7 top-20">
+                <View className="w-52 bg-gray-700 flex justify-center z-50 absolute p-2 right-7 top-20">
                     <Link href={'/dashboard/'}>
-                        <Text>Configurações de timeline</Text>
+                        <Text className="text-white">Configurações de timeline</Text>
                     </Link>
                 </View>
             )}

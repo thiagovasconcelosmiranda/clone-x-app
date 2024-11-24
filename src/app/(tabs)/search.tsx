@@ -1,12 +1,15 @@
+import apiTweet from "@/data/api-tweet";
 import { TweetItem } from "@/src/components/tweet/tweet-item";
 import { Input } from "@/src/components/ui/input";
 import { Ionicons } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Link } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 
 export default function Search() {
     const [searchValue, setSearchValue] = useState('');
+
 
     return (
         <View className="bg-black flex-1 p-2">
@@ -19,17 +22,17 @@ export default function Search() {
                 <Input
                     placeholder="Posts de @testador"
                     value={searchValue}
-                    onChange={e => setSearchValue(e.target.value)}
+                    onChangeText={(e) => setSearchValue(e)}
                     color="#fff"
                     icon="search"
                     size="w-64"
+                    border
                 />
                 
             </View>
             <ScrollView>
-                <TweetItem />
-                <TweetItem />
-                <TweetItem />
+                
+               
             </ScrollView>
         </View>
     )

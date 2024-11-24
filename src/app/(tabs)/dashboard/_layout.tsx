@@ -2,9 +2,8 @@ import { Tabs } from "expo-router";
 import { FontAwesome, Foundation, Ionicons } from "@expo/vector-icons";
 
 export default function Layout() {
-
     return (
-        <Tabs>
+        <Tabs screenOptions={{tabBarStyle:{backgroundColor: 'black'}}}>
             <Tabs.Screen name="index"
                 options={{
                     headerShown: false,
@@ -28,7 +27,7 @@ export default function Layout() {
                         return <FontAwesome name="users" color={color} size={size} />
                     }
                 }} />
-                 <Tabs.Screen name="trending"
+            <Tabs.Screen name="trending"
                 options={{
                     headerShown: false,
                     title: 'Trending',
@@ -52,7 +51,7 @@ export default function Layout() {
                     }
                 }} />
 
-            <Tabs.Screen name="searchz"
+            <Tabs.Screen name="[search]"
                 options={{
                     headerShown: false,
                     title: 'Search Z',

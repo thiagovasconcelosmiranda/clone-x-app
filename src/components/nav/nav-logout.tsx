@@ -15,9 +15,9 @@ export const NavLogout =  () => {
     }
     return (
         <View className="flex-row gap-3">
-            <Entypo name="log-out" size={30} color="gray"/>
+            <Entypo name="log-out" size={30} color="#fff"/>
             <Pressable onPress={handleClickLogout}>
-                 <Text className="font-bold text-2xl">Sair</Text>
+                 <Text className="font-bold text-2xl text-white">Sair</Text>
             </Pressable>
         </View>
     )
