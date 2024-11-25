@@ -10,8 +10,8 @@ import { UserContext } from "@/src/contexts/UserContext";
 import { Loading } from "../ui/loading";
 
 export const SignIn = () => {
-    const [emailValue, setEmailValue] = useState('');
-    const [passwordValue, setPasswordValue] = useState('');
+    const [emailValue, setEmailValue] = useState('thiagodev@gmail.com');
+    const [passwordValue, setPasswordValue] = useState('1234');
     const [errorEmail, setErrorEmail] = useState(false);
     const [errorPassword, setErrorPassword] = useState(false);
     const {setUser} = useContext(UserContext);
@@ -33,6 +33,7 @@ export const SignIn = () => {
              setDisable(false);
          }
     }
+
     return (
         <View className="gap-8">
             <View>
@@ -62,6 +63,9 @@ export const SignIn = () => {
                 {errorPassword && (
                     <ErrorInput text="Campos obrigatório*" />
                 )}
+                <View>
+                    
+                </View>
             </View>
             <Button
                  text={is_loading ?<Loading size={'large'} color="black"/> : 'Acessar'}

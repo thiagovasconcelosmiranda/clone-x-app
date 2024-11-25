@@ -11,6 +11,7 @@ export const RouteStack = () => {
             <Stack.Screen name='user/edit/user' options={{ headerShown: false }} />
             <Stack.Screen name='search' options={{ headerShown: false }} />
             <Stack.Screen name='post' options={{ headerShown: false }} />
+            <Stack.Screen name='posts/[id]' options={{ headerShown: false }} />
         </Stack>
     )
 }

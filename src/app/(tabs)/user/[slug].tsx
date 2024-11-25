@@ -11,6 +11,7 @@ import { UserType } from "@/types/user";
 import url from "@/src/utils/url";
 import { Loading } from "@/src/components/ui/loading";
 import { UserContext } from "@/src/contexts/UserContext";
+import apiFollow from "@/data/api-follow";
 
 type User = {
    user: UserType;
@@ -24,9 +25,11 @@ export default function User() {
    const [avatar, setAvatar] = useState('');
    const [cover, setCover] = useState('');
    const [is_follow, setIs_Follow] = useState(false);
+   const [statusFollow, setStatusFollow] = useState(false);
    const [is_loading, setIs_Loading] = useState(false);
    const { slug } = useLocalSearchParams();
    const { user } = useContext(UserContext);
+   const [token, setToken] = useState('');
 
    useEffect(() => {
       getUser();
@@ -34,12 +37,14 @@ export default function User() {
 
    const getUser = async () => {
       const token = await AsyncStorage.getItem('token');
+      setToken(token);
       if (token) {
          const res = await apiUser.getUser(token, slug);
          setData(res);
          setAvatar(url.avatar(res.user));
          setCover(url.cover(res.user));
          myTweet(token);
+         console.log(res);
          if (user.slug === slug) {
             setIs_Follow(true);
          }
@@ -58,8 +63,12 @@ export default function User() {
       router.replace(`/user/edit/user`);
    }
 
-   const handleButtonFollow = () => {
-      alert('Seguir');
+   const handleButtonFollow = async  () => {
+     if(token){
+       const res = await apiFollow.follow(token, slug);
+      console.log(res);
+      setStatusFollow(res.following);
+     }
    }
 
    return (
@@ -86,7 +95,7 @@ export default function User() {
                {is_follow ? (
                   <Button text="Editar perfil" size="40" onPress={handleButtonEdit} />
                ) : (
-                  <Button text="Seguir" size="40" onPress={handleButtonFollow} />
+                  <Button text={statusFollow ? 'Deixar de seguir': 'Seguir'} size="40" onPress={handleButtonFollow} />
                )}
             </View>
             <View className=" px-8 p-3">

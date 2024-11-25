@@ -10,9 +10,9 @@ type Props = {
 
 export const Textarea = ({onChangeText, value, placeholder, placeholderTextColor, border}: Props) => {
     return (
-        <View className={`h-32 ${border && ' border-2 border-gray-300'}`}>
+        <View className={`h-32 ${border && ' border-2 border-gray-300'} rounded-lg`}>
             <TextInput 
-            className="text-white text-2xl"
+            className="text-white text-2xl px-4"
             value={value}
             placeholder={placeholder}
             placeholderTextColor={placeholderTextColor}

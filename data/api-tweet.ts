@@ -1,14 +1,6 @@
 import { api } from "./api";
 
-type ImageType = {
-    uri: string;
-    name: string;
-    filename: number;
-    type: string
-}
-
 export default {
-
     tweetfeed: async (token: string, page: number) => {
         const req = await fetch(`${api}/feed?page=${page}`, {
             method: 'get',
@@ -53,7 +45,27 @@ export default {
         })
 
         const json = await req.json();
-        console.log(json);
+        return json;
+    },
+
+    tweetLike: async (token: string, id: number) => {
+        const req = await fetch(`${api}/tweet/${id}/like`,{
+          method:'POST',
+          headers:{
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        const json = await req.json();
+        return json;
+    },
+    answers: async (token: string, id: string, body: string) => {
+        const req = await fetch(`${api}/tweet/${id}/${body}`,{
+         method: 'POST',
+         headers: {
+            'Authorization':`Bearer ${token}`
+         }
+        });
+        const json = await req.json();
         return json;
     }
 }
