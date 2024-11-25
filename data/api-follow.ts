@@ -7,6 +7,7 @@ export default {
          headers: {
           'Authorization':`Bearer ${token}`
          }
+        });
         const json = await req.json();
         return json;
     }
