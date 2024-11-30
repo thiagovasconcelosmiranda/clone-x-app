@@ -1,4 +1,4 @@
-import { FlatListComponent, Image, Pressable, Text, View } from "react-native"
+import { Image, Pressable, Text, View } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { Ionicons, Feather, MaterialIcons, AntDesign, Fontisto } from "@expo/vector-icons"
 import { Link } from "expo-router"
@@ -6,6 +6,9 @@ import { Tweet } from "@/types/tweet";
 import url from "@/src/utils/url";
 import { useEffect, useState } from "react";
 import { TweetAnswer } from "./tweet-answer";
+import {formatRelativeTime} from '../../utils/format-relative';
+import { useVideoPlayer, VideoView } from 'expo-video';
+
 
 type Props = {
     tweet: Tweet;
@@ -14,10 +17,11 @@ type Props = {
 
 export const TweetItem = ({ tweet }: Props) => {
     const cover = url.post(tweet);
-    const avatar = url.avatar(tweet.user);
+    const avatar = url.avatar(tweet.user)
     const [answer, setAnswer] = useState([]);
 
     useEffect(() => {
+        console.log(formatRelativeTime(new Date(2024, 8, 1, 10, 0, 0)))
         if(tweet.answer.length > 0){
           setAnswer(tweet.answer);
         }
@@ -38,7 +42,7 @@ export const TweetItem = ({ tweet }: Props) => {
                         <View className="flex-row gap-4">
                             <Text className="font-bold text-white text-2xl">{tweet?.user.name}</Text>
                             <Pressable>
-                                <Text className="text-gray-500 text-2xl">@{tweet?.user.slug}</Text>
+                                <Text className="text-gray-400 text-1xl">@{tweet?.user.slug} - {formatRelativeTime(new Date())} </Text>
                             </Pressable>
                         </View>
                         <Text className="text-white text-1xl top-3">{tweet?.body}</Text>
@@ -74,6 +78,7 @@ export const TweetItem = ({ tweet }: Props) => {
             {tweet.answer.length > 0 && (
                 <View>
                     {answer.map((item, k) => (
+                       
                         <TweetAnswer
                             key={k}
                             answer={item}
@@ -81,8 +86,6 @@ export const TweetItem = ({ tweet }: Props) => {
                     ))}
                 </View>
             )}
-
-
         </SafeAreaView>
     )
 }

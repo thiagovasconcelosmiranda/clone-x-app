@@ -13,6 +13,7 @@ import { View } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
 import { ModalOption } from "@/src/components/ui/modal-option";
 import { Loading } from "@/src/components/ui/loading";
+import uploadImage from "@/src/utils/upload-image";
 
 export default function post() {
     const [bodyValue, setBodyValue] = useState('');
@@ -49,49 +50,13 @@ export default function post() {
 
 
     const uploadCamera = async () => {
-        try {
-            await ImagePicker
-                .requestCameraPermissionsAsync();
-            let result = await ImagePicker.launchCameraAsync({
-                cameraType: ImagePicker.CameraType.front,
-                allowsEditing: true,
-                aspect: [1, 1],
-                quality: 1,
-            });
-
-            if (!result.canceled) {
-                console.log(result.assets[0]);
-                setImage(result.assets[0]);
-                setModalOption(false);
-
-            }
-
-        } catch (error) {
-            setModalOption(false);
-        }
+       const res = await uploadImage.camera();
+       setImage(res);
     }
 
     const uploadGallery = async () => {
-        try {
-            await ImagePicker
-                .requestCameraPermissionsAsync();
-            let result = await ImagePicker.launchImageLibraryAsync({
-                mediaTypes: ImagePicker.MediaTypeOptions.
-                    Images,
-                allowsEditing: true,
-                aspect: [1, 1],
-                quality: 1
-
-            });
-
-            if (!result.canceled) {
-                setImage(result.assets[0]);
-                setModalOption(false);
-            }
-
-        } catch (error) {
-            setModalOption(false);
-        }
+     const res = await uploadImage.gallery();
+     setImage(res);
     }
 
     const uploadCancel = () => {

@@ -1,3 +1,4 @@
+import { formatRelativeTime } from "@/src/utils/format-relative";
 import url from "@/src/utils/url";
 import { Answer } from "@/types/answer"
 import { AntDesign, Feather, Fontisto, Ionicons, MaterialIcons } from "@expo/vector-icons";
@@ -17,7 +18,7 @@ export const TweetAnswer = ({ answer }: Props) => {
             setImagePost(url.postall(answer));
         }
       
-    },[]);
+    },[answer]);
 
     return (
         <View className="flex justify-center items-center">
@@ -30,7 +31,7 @@ export const TweetAnswer = ({ answer }: Props) => {
                     </View>
                     <View>
                         <Text className="text-white text-1xl">{answer.user.name}</Text>
-                        <Text className="text-gray-300">@{answer.user.slug}</Text>
+                        <Text className="text-gray-300">@{answer.user.slug} - {formatRelativeTime(new Date())}</Text>
                     </View>
                 </View>
                 <View className="p-4">
