@@ -3,6 +3,7 @@ import { Button } from "./button"
 import { UserType } from "@/types/user"
 import url from "@/src/utils/url"
 import { Link } from "expo-router"
+import AsyncStorage from "@react-native-async-storage/async-storage"
 
 type Props = {
    user: UserType
@@ -11,8 +12,11 @@ type Props = {
 export const RecommendationItem = ({ user }: Props) => {
    const avatar = url.avatar(user);
 
-   const handleButtonFollow = () => {
-      alert('Follow');
+   const handleButtonFollow = async() => {
+      const token = await AsyncStorage.getItem('token');
+      if(token){
+
+      }
    }
 
    return (

@@ -12,6 +12,7 @@ import { Image, Pressable, Text } from "react-native";
 import { View } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
 import { ModalOption } from "@/src/components/ui/modal-option";
+import { Loading } from "@/src/components/ui/loading";
 
 export default function post() {
     const [bodyValue, setBodyValue] = useState('');
@@ -20,6 +21,7 @@ export default function post() {
     const [image, setImage] = useState(null);
     const [disabled, setDisabled] = useState(true);
     const [modalOption, setModalOption] = useState(false);
+    const [is_loading, setIs_loading] = useState(false);
 
     useEffect(() => {
         if (bodyValue.length > 0) {
@@ -30,12 +32,12 @@ export default function post() {
     }, [bodyValue]);
 
     const handleButtonPublic = async () => {
+        setIs_loading(true);
         const token = await AsyncStorage.getItem('token');
-
         if (token) {
-            const res = await apiTweet.addtweetpost(token, bodyValue, image );
+            const res = await apiTweet.addtweetpost(token, bodyValue, image);
             if (res) {
-                console.log(res);
+                setIs_loading(false);
                 router.replace('/dashboard');
             }
         }
@@ -45,7 +47,7 @@ export default function post() {
         alert("Localização");
     }
 
-    
+
     const uploadCamera = async () => {
         try {
             await ImagePicker
@@ -65,10 +67,8 @@ export default function post() {
             }
 
         } catch (error) {
-           setModalOption(false);
+            setModalOption(false);
         }
-
-      
     }
 
     const uploadGallery = async () => {
@@ -76,11 +76,11 @@ export default function post() {
             await ImagePicker
                 .requestCameraPermissionsAsync();
             let result = await ImagePicker.launchImageLibraryAsync({
-               mediaTypes: ImagePicker.MediaTypeOptions.
-               Images,
-               allowsEditing: true,
-               aspect: [1,1],
-               quality: 1
+                mediaTypes: ImagePicker.MediaTypeOptions.
+                    Images,
+                allowsEditing: true,
+                aspect: [1, 1],
+                quality: 1
 
             });
 
@@ -95,7 +95,7 @@ export default function post() {
     }
 
     const uploadCancel = () => {
-       setModalOption(false);
+        setModalOption(false);
     }
 
     return (
@@ -107,7 +107,9 @@ export default function post() {
                     </Link>
                     <Button
                         onPress={handleButtonPublic}
-                        text="Publicar"
+                        text={is_loading ? (
+                            <Loading size="large" color="#000" />
+                        ) : 'Publicar'}
                         size="40"
                         disabled={disabled}
                         disabledStyle={disabled}
@@ -127,35 +129,34 @@ export default function post() {
                         value={bodyValue}
                         placeholder="O que está acontecendo?"
                         placeholderTextColor="gray"
-                        border
                     />
                 </View>
                 <View className="px-4 overflow-hidden flex justify-center items-center">
-                    {image  && (
-                         <View className="w-80 h-80  flex justify-center items-center rounded-xl overflow-hidden">
-                         <Image className="w-80 h-80" source={{uri: image.uri}} />
-                     </View>
+                    {image && (
+                        <View className="w-80 h-80  flex justify-center items-center rounded-xl overflow-hidden">
+                            <Image className="w-80 h-80" source={{ uri: image.uri }} />
+                        </View>
                     )}
-                   
+
                 </View>
             </View>
 
-            <View className="px-2 flex-row justify-center gap-4 p-3 bg-gray-900">
+            <View className="px-2 p-7 flex-row justify-center gap-4 p-3 bg-gray-900">
                 <View className="flex-row  gap-10">
-                    <Pressable onPress={()=>setModalOption(true)}>
+                    <Pressable onPress={() => setModalOption(true)}>
                         <Entypo name="image" size={30} color="#fff" />
                     </Pressable>
                     <Pressable onPress={handleButtonLocalization}>
                         <AntDesign name="enviromento" size={30} color="#fff" />
                     </Pressable>
                 </View>
-                  
+
                 {modalOption && (
-                   <ModalOption 
-                     uploadCamera={uploadCamera}
-                     uploadGallery={uploadGallery}
-                     uploadCancel={uploadCancel}
-                     bottom="16"
+                    <ModalOption
+                        uploadCamera={uploadCamera}
+                        uploadGallery={uploadGallery}
+                        uploadCancel={uploadCancel}
+                        bottom="0"
                     />
                 )}
             </View>

@@ -16,25 +16,42 @@ export const SignUp = () => {
    const [errorEmail, setErrorEmail] = useState(false);
    const [passwordValue, setPasswordValue] = useState('');
    const [errorPassword, setErrorPassword] = useState(false);
-   const {setUser} = useContext(UserContext);
+   const { setUser } = useContext(UserContext);
    const [is_loading, setIs_loading] = useState(false);
+   const [access, setAccess] = useState(null);
 
    const handleButtonSignup = async () => {
       setIs_loading(true);
       const res = await apiAuth.signup(nameValue, emailValue, passwordValue);
-      if(res.token){
+      if (res.token) {
          await AsyncStorage.setItem('token', res.token);
          setUser(res.user);
          router.replace('/dashboard');
       }
-      if(res.error){
-         console.log(res.error);
+      if (res.error) {
+
          setIs_loading(false);
+         errorResponse(res.error);
       }
+   }
+
+   const errorResponse = (error: any) => {
+      setErrorName(error.name ? error.name : null);
+      setErrorEmail(error.email ? error.email : null);
+      setErrorPassword(error.password ? error.password : null);
+      console.log(error);
+      setAccess(error === 'Acesso negado' ? error : null);
+      console.log(error);
    }
 
    return (
       <View className="gap-8">
+         {access && (
+            <View>
+               <ErrorInput text={access} />
+            </View>
+         )}
+
          <View>
             <Input
                placeholder="Digite seu name"
@@ -45,7 +62,7 @@ export const SignUp = () => {
                border
             />
             {errorName && (
-               <ErrorInput text="Campos obrigatório*" />
+               <ErrorInput text={errorName} />
             )}
          </View>
          <View>
@@ -58,7 +75,7 @@ export const SignUp = () => {
                border
             />
             {errorEmail && (
-               <ErrorInput text="Campos obrigatório*" />
+               <ErrorInput text={errorEmail} />
             )}
          </View>
          <View>
@@ -72,11 +89,11 @@ export const SignUp = () => {
                border
             />
             {errorPassword && (
-               <ErrorInput text="Campos obrigatório*" />
+               <ErrorInput text={errorPassword} />
             )}
          </View>
          <Button
-            text={is_loading ? <Loading size={'large'} color="black"/>: 'Cadastrar'}
+            text={is_loading ? <Loading size={'large'} color="black" /> : 'Cadastrar'}
             onPress={handleButtonSignup}
          />
       </View>

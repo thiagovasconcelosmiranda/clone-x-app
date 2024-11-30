@@ -1,8 +1,6 @@
 import { Image, Pressable, ScrollView, Text, View } from "react-native";
-import { useLocalSearchParams } from "expo-router";
 import { Header } from "@/src/components/header";
-import { TweetItem } from "@/src/components/tweet/tweet-item";
-import { AntDesign, FontAwesome5, Ionicons } from "@expo/vector-icons";
+import {Ionicons } from "@expo/vector-icons";
 import { Button } from "@/src/components/ui/button";
 import { Input } from "@/src/components/ui/input";
 import { useState, useContext, useEffect } from "react";
@@ -13,20 +11,21 @@ import apiUser from "@/data/api-user";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as ImagePicker from 'expo-image-picker';
 import { ModalOption } from "@/src/components/ui/modal-option";
+import { Loading } from "@/src/components/ui/loading";
 
 
 export default function User() {
     const { user } = useContext(UserContext);
     const [nameField, setNameField] = useState('');
-    const [errorName, setErrorName] = useState('');
+    const [errorName, setErrorName] = useState(null);
     const [linkField, setLinkField] = useState('');
-    const [errorEmail, setErrorEmail] = useState('');
+    const [errorLink, setErrorLink] = useState(null);
     const [bioField, setBioField] = useState('');
-    const [errorBody, setErrorBody] = useState('');
     const [fileAvatar, setFileAvatar] = useState(null);
     const [fileCover, setFileCover] = useState(null);
     const [upModalAvatar, setUpModalAvatar] = useState(false);
     const [upModalCover, setUpModalCover] = useState(false);
+    const [is_loading, setIs_loading] = useState(false);
     const avatar = url.avatar(user);
 
     useEffect(() => {
@@ -42,13 +41,6 @@ export default function User() {
                 setLinkField(res.user.link);
                 setBioField(res.user.bio);
             }
-        }
-    }
-
-    const handleButtonUpdate = async () => {
-        const token = await AsyncStorage.getItem('token');
-        if (token) {
-            console.log(token);
         }
     }
 
@@ -77,6 +69,7 @@ export default function User() {
 
         }
     }
+
     const uploadGallery = async () => {
         try {
             await ImagePicker
@@ -119,6 +112,26 @@ export default function User() {
         }
     }
 
+    const handleButtonUpdate = async () => {
+        setIs_loading(true);
+        const token = await AsyncStorage.getItem('token');
+        if (token) {
+            const res = await apiUser.updateuser(token, nameField, linkField, bioField);
+            setIs_loading(false);
+
+            if (res.error) {
+                console.log(res.error);
+                setIs_loading(false);
+                verifyError(res.error);
+            }
+        }
+    }
+
+    const verifyError = (error: any) => {
+        setErrorName(error.name ? error.name : null);
+        setErrorLink(error.link ? error.link : null)
+    }
+
     return (
         <View className="flex-1 bg-black">
             <Header back />
@@ -146,7 +159,6 @@ export default function User() {
                     />
                 )}
 
-
                 <View className=" w-24 h-24 rounded-full flex justify-center  items-center overflow-hidden border-2 border-white  bg-blue-500 absolute top-32 left-10">
                     <Image
                         source={{ uri: `${fileAvatar ? fileAvatar.uri : avatar}` }}
@@ -166,11 +178,8 @@ export default function User() {
                         bottom="96"
                     />
                 )}
-
-                <View className=" flex-row justify-end px-4 p-4">
-                </View>
                 <View className=" px-8 p-10">
-                    <View className="">
+                    <View className="p-4">
                         <Text className="text-white font-bold text-2xl">{user.name}</Text>
                         <Text className="text-gray-400 font-bold text-2xl">@{user.slug}</Text>
                     </View>
@@ -185,7 +194,7 @@ export default function User() {
                             border
                         />
                         {errorName && (
-                            <ErrorInput text="Campos Obrigatório*" />
+                            <ErrorInput text={errorName} />
                         )}
                         <Input
                             placeholder="Digite um Link"
@@ -195,10 +204,9 @@ export default function User() {
                             onChangeText={(e) => setLinkField(e)}
                             border
                         />
-                        {errorEmail && (
-                            <ErrorInput text="Campos Obrigatório*" />
+                            {errorLink && (
+                            <ErrorInput text={errorLink} />
                         )}
-
                         <Input
                             placeholder="Digite sua bio"
                             value={bioField}
@@ -207,11 +215,8 @@ export default function User() {
                             onChangeText={(e) => setBioField(e)}
                             border
                         />
-                        {errorBody && (
-                            <ErrorInput text="Campos Obrigatório*" />
-                        )}
 
-                        <Button text="Alterar" onPress={handleButtonUpdate} />
+                        <Button text={is_loading ? (<Loading size="large" color="black" />) : 'Alterar'} onPress={handleButtonUpdate} />
                     </View>
                 </View>
             </ScrollView>

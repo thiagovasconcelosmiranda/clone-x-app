@@ -12,8 +12,8 @@ export default {
     return json;
   },
 
-  getMyTweet: async (token: string, slug: any) => {
-    const req = await fetch(`${api}/user/${slug}/tweets`, {
+  getMyTweet: async (token: string, slug: any, page: number) => {
+    const req = await fetch(`${api}/user/${slug}/tweets?page=${page}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`
@@ -67,6 +67,33 @@ export default {
       body: data
     });
 
+    const json = await req.json();
+    return json;
+  },
+  updateuser: async (token: string, name: string, link: string, bio: string) => {
+    const data = new FormData();
+    data.append('name', name);
+    data.append('link', link);
+    data.append('bio', bio);
+
+    const req = await fetch(`${api}/user`, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+      body: data
+    });
+
+    const json = await req.json();
+    return json;
+  },
+  userfollow: async (token: string, slug: string) => {
+    const req = await fetch(`${api}/user/${slug}/follow`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
     const json = await req.json();
     return json;
   }

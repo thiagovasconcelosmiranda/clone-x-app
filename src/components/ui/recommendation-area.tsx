@@ -19,7 +19,6 @@ export const RecommendationArea = () => {
             if (res.users.length > 0) {
                 setSuggestion(res.users);
             }
-
         }
     }
 

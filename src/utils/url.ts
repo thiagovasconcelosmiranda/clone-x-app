@@ -9,5 +9,9 @@ export default {
     },
     post: (tweet: any) => {
         return `${api}/posts/${tweet.user.slug}/${tweet.id}/${tweet.image}`;
+    },
+
+    postall: (tweet: any) => {
+        return  `${api}/answers/${tweet.user.slug}/${tweet.id}/${tweet.image.split('/')[5]}`
     }
 }

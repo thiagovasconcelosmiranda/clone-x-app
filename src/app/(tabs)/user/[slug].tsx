@@ -11,7 +11,9 @@ import { UserType } from "@/types/user";
 import url from "@/src/utils/url";
 import { Loading } from "@/src/components/ui/loading";
 import { UserContext } from "@/src/contexts/UserContext";
-import apiFollow from "@/data/api-follow";
+import apiTweet from "@/data/api-tweet";
+import { PageItem } from "@/src/components/ui/page-item";
+import { Link } from "@react-navigation/native";
 
 type User = {
    user: UserType;
@@ -20,55 +22,68 @@ type User = {
 }
 
 export default function User() {
-   const [tweet, setTweet] = useState([]);
+   const [tweets, setTweets] = useState([]);
    const [data, setData] = useState<User>();
    const [avatar, setAvatar] = useState('');
    const [cover, setCover] = useState('');
    const [is_follow, setIs_Follow] = useState(false);
-   const [statusFollow, setStatusFollow] = useState(false);
    const [is_loading, setIs_Loading] = useState(false);
    const { slug } = useLocalSearchParams();
    const { user } = useContext(UserContext);
-   const [token, setToken] = useState('');
+   const [listPages, setListPages] = useState([]);
+   const [currentPage, setCurrentPage] = useState(0);
 
    useEffect(() => {
-      getUser();
-   }, []);
+      getUser(currentPage);
+   }, [currentPage]);
 
-   const getUser = async () => {
+   const getUser = async (page: number) => {
       const token = await AsyncStorage.getItem('token');
-      setToken(token);
       if (token) {
          const res = await apiUser.getUser(token, slug);
          setData(res);
          setAvatar(url.avatar(res.user));
          setCover(url.cover(res.user));
-         myTweet(token);
-         console.log(res);
+         setIs_Loading(true);
+         myTweet(token, res.user.slug, page);
          if (user.slug === slug) {
             setIs_Follow(true);
          }
 
       }
    }
-   const myTweet = async (token: string) => {
-      const res = await apiUser.getMyTweet(token, slug);
-      if (res.tweets.length > 0) {
-         setTweet(res.tweets);
-         setIs_Loading(true);
+
+
+   const myTweet = async (token: string, slug: string, page: number) => {
+
+      if (token) {
+         const req = await apiUser.getMyTweet(token, slug, page);
+         if (req.tweets.length > 0) {
+            let currentPage = (req.countTweet / req.perPage);
+            setTweets(req.tweets);
+            pages(currentPage);
+         }
       }
+   }
+
+   const pages = (count: number) => {
+      let array = [];
+      for (let i = 0; i < count; i++) {
+         array.push(i);
+      }
+      setListPages(array);
    }
 
    const handleButtonEdit = () => {
       router.replace(`/user/edit/user`);
    }
 
-   const handleButtonFollow = async  () => {
-     if(token){
-       const res = await apiFollow.follow(token, slug);
-      console.log(res);
-      setStatusFollow(res.following);
-     }
+   const handleButtonFollow = async () => {
+      const token = await AsyncStorage.getItem('token');
+      if (token) {
+         const res = await apiUser.userfollow(token, slug);
+         console.log(res);
+      }
    }
 
    return (
@@ -95,7 +110,7 @@ export default function User() {
                {is_follow ? (
                   <Button text="Editar perfil" size="40" onPress={handleButtonEdit} />
                ) : (
-                  <Button text={statusFollow ? 'Deixar de seguir': 'Seguir'} size="40" onPress={handleButtonFollow} />
+                  <Button text="Seguir" size="40" onPress={handleButtonFollow} />
                )}
             </View>
             <View className=" px-8 p-3">
@@ -134,19 +149,28 @@ export default function User() {
 
                </View>
             </View>
-
             {is_loading ? (
-               <>
-                  {tweet.map((item, k) => (
-                     <TweetItem key={k} tweet={item} />
+               <View className="top-8">
+                  {tweets.map((item, k) => (
+                      <TweetItem key={k}
+                        tweet={item}
+                     />
                   ))}
-               </>
+               </View>
             ) : (
                <View className="h-52 flex-row justify-center items-center">
                   <Loading size="large" color="#fff" />
                </View>
             )}
          </ScrollView>
+         <View className="p-5 flex-row justify-center gap-2">
+            {listPages.map((item, k) => (
+               <PageItem key={k} page={item + 1}
+                  onPress={() => setCurrentPage(item)}
+                  active={item == currentPage && true}
+               />
+            ))}
+         </View>
       </View>
    )
 }

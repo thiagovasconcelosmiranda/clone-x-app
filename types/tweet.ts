@@ -9,6 +9,7 @@ export type Tweet = {
     commentCount: number;
     retweetCount: number;
     liked: boolean;
+    answer?: any;
     retweeted: boolean;
     dataPost: Date;
     createAt: Date

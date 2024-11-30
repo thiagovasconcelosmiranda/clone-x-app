@@ -2,14 +2,14 @@ import { Text, View } from "react-native"
 
 type Props = {
     text: string;
-    color?: boolean
+    color?: boolean;
+    size?: string;
 
 }
-export const ErrorInput = ({text, color}: Props) =>{
+export const ErrorInput = ({text, color, size }: Props) =>{
     return(
         <View>
-           <Text className={!color ? `text-red-400`: 'color-green-300'}>Campos obrigatório*</Text>
+           <Text className={`${size} text-1xl ${!color ? `text-red-300`: 'color-green-300'}`}>{text}</Text>
         </View>
     )
- 
 }

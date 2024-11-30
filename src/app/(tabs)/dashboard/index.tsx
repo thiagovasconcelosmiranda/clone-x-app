@@ -1,9 +1,7 @@
 import { Header } from "@/src/components/header";
 import { OptionPublic } from "@/src/components/home/option-public";
 import { TweetFeed } from "@/src/components/tweet/tweet-feed";
-import { Loading } from "@/src/components/ui/loading";
-import { Ionicons } from "@expo/vector-icons";
-import { Link } from "expo-router";
+import { PageItem } from "@/src/components/ui/page-item";
 import { useEffect, useState } from "react";
 import { Text, View, ScrollView, Pressable } from "react-native";
 
@@ -12,6 +10,16 @@ export default function HomeScreen() {
   const [page, setPage] = useState(0);
   const [optionPublic, setOptionPublic] = useState(false);
   const [icon, setIcon] = useState(false);
+  const [listPages, setListPages] = useState([]);
+  let array = [];
+
+  useEffect(() => {
+
+    for (let i = 1; i < 6; i++) {
+      array.push(i);
+    }
+    setListPages(array);
+  }, []);
 
   return (
     <View className=" flex-1 bg-black">
@@ -26,15 +34,13 @@ export default function HomeScreen() {
       </View>
       {optionPage ? (
         <View>
-          <ScrollView className="h-96">
-            <TweetFeed page={page} />
-          </ScrollView>
+          <TweetFeed page={page} />
         </View>
       ) : (
         <View>
-           <ScrollView>
+          <ScrollView>
 
-           </ScrollView>
+          </ScrollView>
         </View>
       )}
       <OptionPublic />

@@ -1,21 +1,9 @@
 import { SignIn } from "@/src/components/auth/signin";
 import { Logo } from "@/src/components/ui/Logo";
-import { Link, router } from "expo-router";
-import { useState } from "react";
+import { Link} from "expo-router";
 import { Text, View } from "react-native";
 
 export default function Signin() {
-  const [nameValue, setNameValue] = useState('');
-  const [errorName, setErrorName] = useState(false);
-  const [emailValue, setEmailValue] = useState('');
-  const [errorEmail, setErrorEmail] = useState(false);
-  const [passwordValue, setPasswordValue] = useState('');
-  const [errorPassword, setErrorPassword] = useState(false);
-
-  const handleButtonSignup = () => {
-     router.replace('/dashboard');
-  }
-
   return (
     <View className="flex-1 flex justify-center items-center bg-black">
       <View className="w-80 h-auto flex justify-center gap-4">
